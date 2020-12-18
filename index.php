@@ -10,6 +10,7 @@
 	<h1>登録ページ</h1>
 
 	<?php if( $page_flag === 1 ): ?>
+
 	    <form method="post" action="">
 			<div class="element_wrap">
 				<label>氏名</label>
@@ -24,26 +25,27 @@
 			<input type="hidden" name="your_name" value="<?php echo $_POST['your_name']; ?>">
 			<input type="hidden" name="email" value="<?php echo $_POST['email']; ?>">
 		</form>
+
 	<?php elseif( $page_flag === 2 ): ?>
 
 		<p>送信が完了しました。</p>
 
 	<?php else: ?>
 
-	<?php include('./error.php'); ?>
-
-	<form method="post" action="">
-		<div class="element_wrap">
-			<label>氏名</label>
-			<input type="text" name="your_name" value="<?php if( !empty($_POST['your_name']) ){ echo $_POST['your_name']; } ?>">
-		</div>
-		<div class="element_wrap">
-			<label>メールアドレス</label>
-			<input type="text" name="email" value="<?php if( !empty($_POST['email']) ){ echo $_POST['email']; } ?>">
-		</div>
-		<input type="submit" name="btn_confirm" value="確認">
-		<input type="submit" name="btn_confirm" value="リセット">
-	</form>
+		<?php include('./error.php'); ?>
+		
+		<form method="post" action="">
+			<div class="element_wrap">
+				<label>氏名</label>
+				<input type="text" name="your_name" value="<?php if( !empty($_POST['your_name']) ){ echo $_POST['your_name']; } ?>">
+			</div>
+			<div class="element_wrap">
+				<label>メールアドレス</label>
+				<input type="text" name="email" value="<?php if( !empty($_POST['email']) ){ echo $_POST['email']; } ?>">
+			</div>
+			<input type="submit" name="btn_confirm" value="確認">
+			<input type="submit" name="btn_confirm" value="リセット">
+		</form>
 
 	<?php endif; ?>
 </body>
