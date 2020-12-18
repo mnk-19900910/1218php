@@ -33,7 +33,7 @@
 	<?php else: ?>
 
 		<?php include('./error.php'); ?>
-		
+
 		<form method="post" action="">
 			<div class="element_wrap">
 				<label>氏名</label>
@@ -44,7 +44,7 @@
 				<input type="text" name="email" value="<?php if( !empty($_POST['email']) ){ echo $_POST['email']; } ?>">
 			</div>
 			<input type="submit" name="btn_confirm" value="確認">
-			<input type="submit" name="btn_confirm" value="リセット">
+			<input type="reset" name="btn_back" onclick="return confirm('削除しますか？');" value="リセット">
 		</form>
 
 	<?php endif; ?>
