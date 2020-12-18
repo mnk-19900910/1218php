@@ -1,0 +1,2 @@
+
+create table task(email varchar(100) primary key,name varchar(40))
