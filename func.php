@@ -1,5 +1,5 @@
 <?php
-// var_dump($_POST);
+var_dump($_POST);
 
 // 変数の初期化
 $page_flag = 0;
@@ -42,32 +42,20 @@ if( !empty($_POST['btn_confirm']) ) {
 
 	    // ヘッダー情報を設定
 	    $header = "MIME-Version: 1.0\n";
-	    $header .= "From: GRAYCODE <noreply@gray-code.com>\n";
-	    $header .= "Reply-To: GRAYCODE <noreply@gray-code.com>\n";
+	    $header .= "From: TEST_SEND <noreply@test-send.com>\n";
+	    $header .= "Reply-To: TEST_RECEIVE <noreply@test-receive.com>\n";
 
 	    // 件名を設定
-	    $auto_reply_subject = 'お問い合わせありがとうございます。';
-
+		$auto_reply_subject = '登録完了メール';
+		
 	    // 本文を設定
-	    $auto_reply_text = "この度は、お問い合わせ頂き誠にありがとうございます。\n\n";
-	    $auto_reply_text .= "お問い合わせ日時：" . date("Y-m-d H:i") . "\n";
+	    $auto_reply_text = "登録完了メールです。\n\n";
 	    $auto_reply_text .= "氏名：" . $_POST['your_name'] . "\n";
 	    $auto_reply_text .= "メールアドレス：" . $_POST['email'] . "\n\n";
 
 	    // メール送信
         mb_send_mail( $_POST['email'], $auto_reply_subject, $auto_reply_text);
         
-	    // 運営側へ送るメールの件名
-	    $admin_reply_subject = "お問い合わせを受け付けました";
-        
-	    // 本文を設定
-	    $admin_reply_text = "下記の内容でお問い合わせがありました。\n\n";
-	    $admin_reply_text .= "お問い合わせ日時：" . date("Y-m-d H:i") . "\n";
-	    $admin_reply_text .= "氏名：" . $_POST['your_name'] . "\n";
-	    $admin_reply_text .= "メールアドレス：" . $_POST['email'] . "\n\n";
-
-	    // 運営側へメール送信
-	    mb_send_mail( 'webmaster@gray-code.com', $admin_reply_subject, $admin_reply_text, $header);
     }else{
         $page_flag = 0;
     }
