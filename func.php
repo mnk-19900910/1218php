@@ -17,9 +17,9 @@ if( !empty($_POST['btn_confirm']) ) {
     $error = validation($clean);
 
 	if( empty($error) ) {
-        $page_flag = 1;
+    $page_flag = 1;
 
-        // セッションの書き込み
+    // セッションの書き込み
 		session_start();
 		$_SESSION['page'] = true;
 	}
@@ -29,32 +29,62 @@ if( !empty($_POST['btn_confirm']) ) {
 
 		// セッションの削除
 		unset($_SESSION['page']);
-        $page_flag = 2;
-        
-        // 変数とタイムゾーンを初期化
-        $header = null;
-	    $auto_reply_subject = null;
-        $auto_reply_text = null;
-        $admin_reply_subject = null;
-	    $admin_reply_text = null;
-	    date_default_timezone_set('Asia/Tokyo');
+    $page_flag = 2;
+    
+    // 変数とタイムゾーンを初期化
+    $header = null;
+	  $auto_reply_subject = null;
+    $auto_reply_text = null;
+    $admin_reply_subject = null;
+	  $admin_reply_text = null;
+	  date_default_timezone_set('Asia/Tokyo');
 
-	    // ヘッダー情報を設定
-	    $header = "MIME-Version: 1.0\n";
-	    $header .= "From: TEST_SEND <noreply@test-send.com>\n";
-	    $header .= "Reply-To: TEST_RECEIVE <noreply@test-receive.com>\n";
+	  // ヘッダー情報を設定
+	  $header = "MIME-Version: 1.0\n";
+	  $header .= "From: TEST_SEND <noreply@test-send.com>\n";
+	  $header .= "Reply-To: TEST_RECEIVE <noreply@test-receive.com>\n";
 
-	    // 件名を設定
+	  // 件名を設定
 		$auto_reply_subject = '登録完了メール';
 		
-	    // 本文を設定
-	    $auto_reply_text = "登録完了メールです。\n\n";
-	    $auto_reply_text .= "氏名：" . $_POST['your_name'] . "\n";
-	    $auto_reply_text .= "メールアドレス：" . $_POST['email'] . "\n\n";
+	  // 本文を設定
+	  $auto_reply_text = "登録完了メールです。\n\n";
+	  $auto_reply_text .= "氏名：" . $_POST['your_name'] . "\n";
+	  $auto_reply_text .= "メールアドレス：" . $_POST['email'] . "\n\n";
 
-	    // メール送信
-        mb_send_mail( $_POST['email'], $auto_reply_subject, $auto_reply_text);
-        
+	  // メール送信
+    mb_send_mail( $_POST['email'], $auto_reply_subject, $auto_reply_text);
+
+		// データベースに接続
+		$mysqli = new mysqli( 'localhost', 'root', 'password', 'task');
+		
+		// 接続エラーの確認
+		if( $mysqli->connect_errno ) {
+			$error_message[] = '書き込みに失敗しました。 エラー番号 '.$mysqli->connect_errno.' : '.$mysqli->connect_error;
+		} else {
+
+			// 文字コード設定
+			$mysqli->set_charset('utf8');
+			
+			// 書き込み日時を取得
+			$now_date = date("Y-m-d H:i:s");
+			
+			// データを登録するSQL作成
+			$sql = "INSERT INTO message (your_name, email) VALUES ( '$clean[your_name]', '$clean[email]')";
+			
+			// データを登録
+			$res = $mysqli->query($sql);
+		
+			if( $res ) {
+				$success_message = 'メッセージを書き込みました。';
+			} else {
+				$error_message[] = '書き込みに失敗しました。';
+			}
+		
+			// データベースの接続を閉じる
+			$mysqli->close();
+		}
+
     }else{
         $page_flag = 0;
     }
@@ -69,8 +99,8 @@ function validation($data) {
 		$error[] = "「氏名」は必ず入力してください。";
 
 	} elseif( 40 < mb_strlen($data['your_name']) ) {
-        $error[] = "「氏名」は40文字以内で入力してください。";
-        
+    $error[] = "「氏名」は40文字以内で入力してください。";
+
     } elseif( !preg_match( '/([ァ-ヴ]+\s[ァ-ヴ]+)$/', $data['your_name']) ) {
         $error[] = "「氏名」は全角カナで入力してください。(氏名の間は半角スペース１文字)";
     }
